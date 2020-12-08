@@ -13,4 +13,8 @@ class Board
       @cells[one_coordinate] = Cell.new(one_coordinate)
     end
   end
+
+  def valid_coordinate?(coordinate)
+    @cells.include?(coordinate)
+  end
 end
