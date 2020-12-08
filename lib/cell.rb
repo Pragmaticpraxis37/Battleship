@@ -30,5 +30,5 @@ class Cell
     return "M" if empty?
     return "X" if @ship.sunk?
     return "H" if !empty?
-  end
+   end
 end
