@@ -1,10 +1,14 @@
 require "./lib/cell"
 
 class Board
-  attr_reader :cells
+  attr_reader :cells,
+              :consecutive_letters,
+              :consecutive_numbers
 
   def initialize
     @cells = Hash.new
+    @consecutive_numbers = []
+    @consecutive_letters = []
   end
 
   def create_board
@@ -20,10 +24,7 @@ class Board
 
   def valid_length(ship, coordinates)
     ship.length == coordinates.length
-      #valid_placement
   end
-
-  
 
   def consecutive_numbers(ship, coordinates)
     collect = []
@@ -46,6 +47,28 @@ class Board
     # end
     # return_value
   end
+
+  def split_coordinates(coordinates)
+    coordinates.each do |coord|
+
+      @consecutive_numbers << coord[1].to_i
+      @consecutive_letters << coord[0].ord
+    end
+    # @consecutive_numbers
+    # @consecutive_letters
+    # require "pry"; binding.pry
+
+
+    # consecutive_numbers = nil
+    # consecutive_letters = nil
+    #
+    # collect_numbers.each_cons(2).all? do |a ,b|
+    #   b == a + 1
+    # end
+    #
+    # collect_letters.each_cons(2).all? do |a ,b|
+    #   b == a + 1
+    # end
 
   end
 end

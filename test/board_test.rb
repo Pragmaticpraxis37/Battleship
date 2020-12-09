@@ -40,13 +40,26 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_length(@submarine, ["A2", "A3", "A4"])
   end
 
-  def test_coordinates_are_consecutive
+  def test_split_coordinates_creates_two_arrays
     @board.create_board
-    assert_equal false, @board.consecutive_numbers(@cruiser, ["A1", "A2", "A4"])
-    assert_equal false, @board.consecutive_numbers(@cruiser, ["A3", "A2", "A1"])
-    assert_equal false, @board.consecutive_numbers(@submarine, ["A1", "C1"])
-    assert_equal false, @board.consecutive_numbers(@submarine, ["C1", "B1"])
-    assert_equal true, @board.consecutive_numbers(@submarine, ["A1", "A2"])
-    assert_equal false, @board.consecutive_numbers(@cruiser, ["A1","B2", "C3"])
+
+    test_letters = @board
+    test = test_letters.split_coordinates(["A1", "A2"])
+    assert_equal [65, 65], test.consecutive_letters
+    assert_equal [1, 2], @board.split_coordinates(["A1", "A2"])
+    # assert_equal false, @board.valid_length(@submarine, ["A2", "A3", "A4"])
+
   end
+
+  # def test_coordinates_are_consecutive
+  #   @board.create_board
+  #   assert_equal false, @board.consecutive_numbers(@cruiser, ["A1", "A2", "A4"])
+  #   assert_equal false, @board.consecutive_numbers(@cruiser, ["A3", "A2", "A1"])
+  #   assert_equal false, @board.consecutive_numbers(@submarine, ["A1", "C1"])
+  #   assert_equal false, @board.consecutive_numbers(@submarine, ["C1", "B1"])
+  #   assert_equal true, @board.consecutive_numbers(@submarine, ["A1", "A2"])
+  #   assert_equal false, @board.consecutive_numbers(@cruiser, ["A1","B2", "C3"])
+  # end
+
+
 end
