@@ -20,24 +20,63 @@ class Board
 
   def valid_length(ship, coordinates)
     ship.length == coordinates.length
-      #valid_placement
   end
 
-  def consecutive_numbers(ship, coordinates)
-    collect = []
+  def valid_consecutive_numbers?(coordinates)
+    x = split_numbers(coordinates)
+    
+    answer = x.each_cons(2).all? do |a ,b|
+
+      b == a + 1
+
+    end
+    answer
+  end
+
+  def valid_consecutive_letters?(coordinates)
+    y = split_letters(coordinates)
+
+    answer = y.each_cons(2).all? do |a ,b|
+      b == a + 1
+    end
+    answer
+  end
+
+  def invalid_diagonal(coordinates)
+    if valid_consecutive_letters?(coordinates) && valid_consecutive_numbers?(coordinates) == true
+      false
+    else
+      true
+    end
+  end
+
+  def split_numbers(coordinates)
+    consecutive_numbers = []
     coordinates.each do |coord|
-      collect << coord[1].to_i
+      consecutive_numbers << coord[1].to_i
     end
-    tracker = collect[0].to_i
-    return_value = nil
-    collect.each do |number|
-      if number == tracker
-        return_value = true
-        tracker += 1
-      else
-        return_value = false
-      end
+    consecutive_numbers
+  end
+
+  def split_letters(coordinates)
+    consecutive_letters = []
+    coordinates.each do |coord|
+      consecutive_letters << coord[0].ord
     end
-    return_value
+
+    consecutive_letters
+  end
+
+  def valid_placement?(ship, coordinates)
+    split_letters(coordinates)
+    split_numbers(coordinates)
+    if invalid_diagonal(coordinates) == false
+      return false
+    else
+    valid_length(ship, coordinates) &&
+    valid_consecutive_numbers?(coordinates) ||
+    valid_length(ship, coordinates) &&
+    valid_consecutive_letters?(coordinates)
+    end
   end
 end
