@@ -106,5 +106,17 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_placement?(@submarine, ["A1", "B1"])
   end
 
+  def test_render_board_returns_expected_strings
+    @board.create_board
+    expected = " 1 2 3 4 \n A . . . . \n B . . . . \n C . . . . \n D . . . ."
+    assert_equal expected, @board.render
+  end
+
+  def test_render_can_show_when_default_arg_is_true
+      @board.create_board
+      @board.place(@cruiser, ["A1", "A2", "A3"])
+      expected = " 1 2 3 4 \n A S S S . \n B . . . . \n C . . . . \n D . . . ."
+      assert_equal expected, @board.render(true)
+  end
 
 end
