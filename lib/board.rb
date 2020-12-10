@@ -80,4 +80,14 @@ class Board
     valid_consecutive_letters?(coordinates)
     end
   end
+
+  def place(ship, coordinates)
+    if valid_placement?(ship, coordinates)
+      coordinates.each do |coord|
+        @cells[coord].place_ship(ship)
+      end
+    else
+      false
+    end
+  end
 end
