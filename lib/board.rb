@@ -1,14 +1,10 @@
 require "./lib/cell"
 
 class Board
-  attr_reader :cells,
-              :consecutive_letters,
-              :consecutive_numbers
+  attr_reader :cells
 
   def initialize
     @cells = Hash.new
-    @consecutive_numbers = []
-    @consecutive_letters = []
   end
 
   def create_board
@@ -26,53 +22,61 @@ class Board
     ship.length == coordinates.length
   end
 
-  def valid_consecutive_numbers?
-    # collect = []
-    # coordinates.each do |coord|
-    #   collect << coord[1].to_i
-    # end
-    # tracker = collect[0].to_i
-    answer = consecutive_numbers.each_cons(2).all? do |a ,b|
+  def valid_consecutive_numbers?(coordinates)
+    x = split_numbers(coordinates)
+    
+    answer = x.each_cons(2).all? do |a ,b|
+
       b == a + 1
+
     end
-    @consecutive_numbers.clear
     answer
   end
 
-  def valid_consecutive_letters?
-    answer = consecutive_letters.each_cons(2).all? do |a ,b|
+  def valid_consecutive_letters?(coordinates)
+    y = split_letters(coordinates)
+
+    answer = y.each_cons(2).all? do |a ,b|
       b == a + 1
     end
-    @consecutive_letters.clear
     answer
   end
 
-  def invalid_diagonal
-    if valid_consecutive_letters? && valid_consecutive_numbers? == true
+  def invalid_diagonal(coordinates)
+    if valid_consecutive_letters?(coordinates) && valid_consecutive_numbers?(coordinates) == true
       false
     else
       true
     end
   end
 
-  def split_coordinates(coordinates)
+  def split_numbers(coordinates)
+    consecutive_numbers = []
     coordinates.each do |coord|
-
-      @consecutive_numbers << coord[1].to_i
-      @consecutive_letters << coord[0].ord
+      consecutive_numbers << coord[1].to_i
     end
+    consecutive_numbers
+  end
+
+  def split_letters(coordinates)
+    consecutive_letters = []
+    coordinates.each do |coord|
+      consecutive_letters << coord[0].ord
+    end
+
+    consecutive_letters
   end
 
   def valid_placement?(ship, coordinates)
-    split_coordinates(coordinates)
-    if invalid_diagonal == false
+    split_letters(coordinates)
+    split_numbers(coordinates)
+    if invalid_diagonal(coordinates) == false
       return false
     else
-      require "pry"; binding.pry
     valid_length(ship, coordinates) &&
-    valid_consecutive_numbers? ||
+    valid_consecutive_numbers?(coordinates) ||
     valid_length(ship, coordinates) &&
-    valid_consecutive_letters?
+    valid_consecutive_letters?(coordinates)
     end
   end
 end
