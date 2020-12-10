@@ -69,19 +69,15 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-
     split_letters(coordinates)
     split_numbers(coordinates)
-    if invalid_diagonal(coordinates) == false
+    if invalid_diagonal(coordinates) == false || overlap(coordinates) == false 
       return false
     else
-
     valid_length(ship, coordinates) &&
-    valid_consecutive_numbers?(coordinates) &&
-    overlap(coordinates) ||
+    valid_consecutive_numbers?(coordinates) ||
     valid_length(ship, coordinates) &&
-    valid_consecutive_letters?(coordinates) &&
-    overlap(coordinates)
+    valid_consecutive_letters?(coordinates)
     end
   end
 
@@ -96,12 +92,8 @@ class Board
   end
 
   def overlap(coordinates)
-    if coordinates.any? do |coord|
-      @cells[coord] != nil
-      return false
-    else
-      return true
-      end
+     coordinates.any? do |coord|
+      @cells[coord].empty?
     end
   end
 end
