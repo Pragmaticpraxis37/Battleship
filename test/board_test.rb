@@ -89,6 +89,4 @@ class BoardTest < Minitest::Test
     assert_equal true, @board.valid_placement?(@submarine, ["A1", "A2"])
     assert_equal false, @board.valid_placement?(@cruiser, ["A1","B2", "C3"])
   end
-
-
 end
