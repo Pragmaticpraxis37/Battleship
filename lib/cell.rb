@@ -3,7 +3,7 @@ class Cell
              :ship
   def initialize(coordinate)
     @coordinate = coordinate
-    @ship = nil
+    @ship = ship
     @fired_upon = false
   end
 
@@ -25,10 +25,11 @@ class Cell
   end
 
   def render(default = false)
-    return "S" if default == true
+    return "S" if default == true && !empty?
     return '.' if @fired_upon == false
     return "M" if empty?
-    return "X" if @ship.sunk?
+    return "X" if @ship.sunk? && !empty?
     return "H" if !empty?
+
    end
 end
