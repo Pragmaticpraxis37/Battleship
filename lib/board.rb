@@ -1,5 +1,6 @@
 require "./lib/cell"
 
+
 class Board
   attr_reader :cells,
               :consecutive_letters,
@@ -26,9 +27,13 @@ class Board
     ship.length == coordinates.length
   end
 
+  # def consecutive_letters
+  #   @consecutive_letters
+  # end
+
   def split_coordinates(coordinates)
     coordinates.each do |coord|
-
+      # require "pry"; binding.pry
       @consecutive_numbers << coord[1].to_i
       @consecutive_letters << coord[0].ord
     end

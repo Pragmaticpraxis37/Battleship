@@ -41,15 +41,12 @@ class BoardTest < Minitest::Test
   end
 
   def test_split_coordinates_creates_two_arrays
-    @board.create_board
-
     test_letters = @board
-    test = test_letters.split_coordinates(["A1", "A2"])
-    assert_equal [65, 65], test.consecutive_letters
-    assert_equal [1, 2], @board.split_coordinates(["A1", "A2"])
-    # assert_equal false, @board.valid_length(@submarine, ["A2", "A3", "A4"])
-
+    test_letters.split_coordinates(["A1", "A2"])
+    assert_equal [65, 65], test_letters.consecutive_letters
+    assert_equal [1, 2], test_letters.consecutive_numbers
   end
+
 
   # def test_coordinates_are_consecutive
   #   @board.create_board
