@@ -36,7 +36,6 @@ class Board
 
   def valid_consecutive_letters?(coordinates)
     y = split_letters(coordinates)
-
     answer = y.each_cons(2).all? do |a ,b|
       b == a + 1
     end
@@ -64,7 +63,6 @@ class Board
     coordinates.each do |coord|
       consecutive_letters << coord[0].ord
     end
-
     consecutive_letters
   end
 
@@ -93,5 +91,13 @@ class Board
      coordinates.any? do |coord|
       @cells[coord].empty?
     end
+  end
+
+  def render(default = false)
+    " 1 2 3 4 \n" +
+    " A #{@cells["A1"].render(default)} #{@cells["A2"].render(default)} #{@cells["A3"].render(default)} #{@cells["A4"].render(default)} \n" +
+    " B #{@cells["B1"].render(default)} #{@cells["B2"].render(default)} #{@cells["B3"].render(default)} #{@cells["B4"].render(default)} \n" +
+    " C #{@cells["C1"].render(default)} #{@cells["C2"].render(default)} #{@cells["C3"].render(default)} #{@cells["C4"].render(default)} \n" +
+    " D #{@cells["D1"].render(default)} #{@cells["D2"].render(default)} #{@cells["D3"].render(default)} #{@cells["D4"].render(default)}"
   end
 end
