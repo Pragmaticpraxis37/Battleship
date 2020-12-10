@@ -1,5 +1,6 @@
 require "./lib/cell"
 
+
 class Board
   attr_reader :cells
 
@@ -24,7 +25,7 @@ class Board
 
   def valid_consecutive_numbers?(coordinates)
     x = split_numbers(coordinates)
-    
+
     answer = x.each_cons(2).all? do |a ,b|
 
       b == a + 1
@@ -77,6 +78,16 @@ class Board
     valid_consecutive_numbers?(coordinates) ||
     valid_length(ship, coordinates) &&
     valid_consecutive_letters?(coordinates)
+    end
+  end
+
+  def place(ship, coordinates)
+    if valid_placement?(ship, coordinates)
+      coordinates.each do |coord|
+        @cells[coord].place_ship(ship)
+      end
+    else
+      false
     end
   end
 end
