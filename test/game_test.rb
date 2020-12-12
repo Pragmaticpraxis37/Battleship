@@ -4,6 +4,7 @@ require './lib/cell'
 require './lib/ship'
 require './lib/board'
 require './lib/game'
+
 class GameTest < Minitest::Test
 
   def setup
