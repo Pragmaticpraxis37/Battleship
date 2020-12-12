@@ -22,8 +22,18 @@ class GameTest < Minitest::Test
 
   def test_computer_comp_place_ships
     game = Game.new
+    game.cpu_board.create_board
     game.vertical_or_horizontal_cruiser
 
     assert_equal 3, game.cpu_board.render(true).count("S")
+  end
+
+  def test_computer_comp_place_cruiser_and_sub
+    game = Game.new
+    game.cpu_board.create_board
+    game.vertical_or_horizontal_cruiser
+    game.vertical_or_horizontal_sub
+
+    assert_equal 5, game.cpu_board.render(true).count("S")
   end
 end
