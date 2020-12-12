@@ -1,6 +1,8 @@
 require "./lib/cell"
 require "./lib/ship"
 require "./lib/board"
+require "./lib/messages"
+
 class Game
   attr_reader:cpu_board,
              :player_board,
