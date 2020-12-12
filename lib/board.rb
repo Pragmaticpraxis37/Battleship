@@ -1,6 +1,4 @@
 require "./lib/cell"
-
-
 class Board
   attr_reader :cells
 
@@ -12,6 +10,7 @@ class Board
     coordinate_array = %w[A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 D1 D2 D3 D4]
     coordinate_array.each do |one_coordinate|
       @cells[one_coordinate] = Cell.new(one_coordinate)
+
     end
   end
 
@@ -99,5 +98,7 @@ class Board
     " B #{@cells["B1"].render(default)} #{@cells["B2"].render(default)} #{@cells["B3"].render(default)} #{@cells["B4"].render(default)} \n" +
     " C #{@cells["C1"].render(default)} #{@cells["C2"].render(default)} #{@cells["C3"].render(default)} #{@cells["C4"].render(default)} \n" +
     " D #{@cells["D1"].render(default)} #{@cells["D2"].render(default)} #{@cells["D3"].render(default)} #{@cells["D4"].render(default)}"
+
   end
+
 end
