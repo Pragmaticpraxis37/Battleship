@@ -74,6 +74,7 @@ class Board
     valid_consecutive_numbers?(coordinates) ||
     valid_length(ship, coordinates) &&
     valid_consecutive_letters?(coordinates)
+    require "pry"; binding.pry
   end
 
   def place(ship, coordinates)

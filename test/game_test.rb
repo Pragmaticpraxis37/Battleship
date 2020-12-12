@@ -37,4 +37,6 @@ class GameTest < Minitest::Test
 
     assert_equal 5, game.cpu_board.render(true).count("S")
   end
+
+
 end
