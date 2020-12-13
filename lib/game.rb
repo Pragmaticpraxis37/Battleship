@@ -70,6 +70,7 @@ class Game
     end
 
   def assign_missing_letter_coordinates(response)
+    require "pry"; binding.pry
     if response[0][0] == "A"
       coordinates = [response, "B" + response[-1], "C" + response[-1]]
     else
