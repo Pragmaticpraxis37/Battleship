@@ -9,7 +9,11 @@ class Game
              :user_cruiser,
              :user_submarine,
              :comp_sub,
-             :comp_cruiser
+             :comp_cruiser,
+             :cpu_ships_placed,
+             :player_ships_placed,
+             :messages
+
   def initialize
     @cpu_board = Board.new
     @player_board = Board.new
@@ -17,7 +21,9 @@ class Game
     @user_submarine = Ship.new("Submarine", 2)
     @comp_cruiser = Ship.new("Cruiser", 3)
     @comp_submarine = Ship.new("Submarine", 2)
-
+    @cpu_ships_placed = false
+    @player_ships_placed = false
+    # @messages = Messages.new
   end
 
   def vertical_or_horizontal_cruiser
@@ -71,9 +77,7 @@ class Game
     end
 
   def assign_missing_letter_coordinates(response)
-    require "pry"; binding.pry
     if response[0][0] == "A"
-      require "pry"; binding.pry
       coordinates = [response, "B" + response[-1], "C" + response[-1]]
     else
     coordinates = [response, "C" + response[-1], "D" + response[-1]]
@@ -150,8 +154,9 @@ class Game
         @cpu_board.cells[coord].place_ship(ship)
       end
     else
-      false
+      vertical_or_horizontal_sub
     end
+    @cpu_ships_placed = true
   end
 
   def player_place_ships(ship, coordinates)
@@ -162,7 +167,6 @@ class Game
       coordinates = gets.chomp.upcase.split(" ")
     end
       @player_board.place(@user_cruiser, coordinates)
-      require "pry"; binding.pry
       puts @player_board.render(true)
       puts "Enter the squares for the Submarine (2 spaces):
     >"
@@ -174,4 +178,30 @@ class Game
       @player_board.place(@user_submarine, coordinates)
       puts @player_board.render(true)
   end
+
+  def turn
+
+    if @cpu_ships_placed == false
+      @cpu_board.create_board
+      vertical_or_horizontal_cruiser
+      vertical_or_horizontal_sub
+      puts "=============COMPUTER BOARD============="
+      puts @cpu_board.render(true)
+    else
+      puts "=============COMPUTER BOARD============="
+      puts @cpu_board.render(true)
+      puts "==============PLAYER BOARD=============="
+      puts @player_board.render(true)
+    end
+
+    # if @player_ships_placed == false
+    #   @messages.player_ship_placement_cruiser
+    # end
+
+
+
+  end
 end
+
+game = Game.new
+require "pry"; binding.pry
