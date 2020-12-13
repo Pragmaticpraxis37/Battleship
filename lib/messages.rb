@@ -55,6 +55,3 @@ Enter the squares for the Cruiser (3 spaces):
 
   end
 end
-
-message = Messages.new
-require "pry"; binding.pry
