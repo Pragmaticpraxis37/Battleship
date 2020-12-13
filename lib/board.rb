@@ -42,6 +42,7 @@ class Board
   end
 
   def invalid_diagonal(coordinates)
+
     if valid_consecutive_letters?(coordinates) && valid_consecutive_numbers?(coordinates) == true
       false
     else
@@ -63,31 +64,35 @@ class Board
       consecutive_letters << coord[0].ord
     end
     consecutive_letters
+
   end
 
   def valid_placement?(ship, coordinates)
     split_letters(coordinates)
+
     split_numbers(coordinates)
+
     return false if invalid_diagonal(coordinates) == false
-    return false if overlap(coordinates) == false
+    return false if  overlap(coordinates) == false
+
     valid_length(ship, coordinates) &&
     valid_consecutive_numbers?(coordinates) ||
     valid_length(ship, coordinates) &&
     valid_consecutive_letters?(coordinates)
+
   end
 
   def place(ship, coordinates)
     if valid_placement?(ship, coordinates)
       coordinates.each do |coord|
         @cells[coord].place_ship(ship)
+
       end
-    else
-      false
     end
   end
 
   def overlap(coordinates)
-     coordinates.any? do |coord|
+    coordinates.all? do |coord|
       @cells[coord].empty?
     end
   end
