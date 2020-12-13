@@ -1,6 +1,8 @@
 require "./lib/cell"
 require "./lib/ship"
 require "./lib/board"
+require "./lib/messages"
+
 class Game
   attr_reader:cpu_board,
              :player_board,
@@ -15,6 +17,7 @@ class Game
     @user_submarine = Ship.new("Submarine", 2)
     @comp_cruiser = Ship.new("Cruiser", 3)
     @comp_submarine = Ship.new("Submarine", 2)
+
   end
 
   def vertical_or_horizontal_cruiser
@@ -69,6 +72,7 @@ class Game
 
   def assign_missing_letter_coordinates(response)
     if response[0][0] == "A"
+      require "pry"; binding.pry
       coordinates = [response, "B" + response[-1], "C" + response[-1]]
     else
     coordinates = [response, "C" + response[-1], "D" + response[-1]]
@@ -148,6 +152,24 @@ class Game
       false
     end
   end
-end
 
-game = Game.new
+  def player_place_ships(ship, coordinates)
+    messages = Messages.new
+    @player_board.create_board
+    until @player_board.valid_placement?(@user_cruiser, coordinates) == true
+      puts "Invalid Placement, Try Again"
+      coordinates = gets.chomp.upcase.split(" ")
+    end
+      @player_board.place(@user_cruiser, coordinates)
+      puts @player_board.render(true)
+      puts "Enter the squares for the Submarine (2 spaces):
+    >"
+      coordinates = gets.chomp.upcase.split(" ")
+        until @player_board.valid_placement?(@user_submarine, coordinates) == true
+      puts "Invalid Placement, Try Again"
+      coordinates = gets.chomp.upcase.split(" ")
+    end
+      @player_board.place(@user_submarine, coordinates)
+      puts @player_board.render(true)
+  end
+end

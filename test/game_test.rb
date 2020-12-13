@@ -4,6 +4,7 @@ require './lib/cell'
 require './lib/ship'
 require './lib/board'
 require './lib/game'
+
 class GameTest < Minitest::Test
 
   def setup
@@ -36,4 +37,6 @@ class GameTest < Minitest::Test
 
     assert_equal 5, game.cpu_board.render(true).count("S")
   end
+
+
 end
