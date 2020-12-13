@@ -162,12 +162,14 @@ class Game
       coordinates = gets.chomp.upcase.split(" ")
     end
       @player_board.place(@user_cruiser, coordinates)
+      require "pry"; binding.pry
       puts @player_board.render(true)
       puts "Enter the squares for the Submarine (2 spaces):
     >"
       coordinates = gets.chomp.upcase.split(" ")
       x = @player_board.valid_placement?(@user_submarine, coordinates)
     until @player_board.valid_placement?(@user_submarine, coordinates) == true
+      require "pry"; binding.pry
       puts "Invalid Placement, Try Again"
       coordinates = gets.chomp.upcase.split(" ")
     end

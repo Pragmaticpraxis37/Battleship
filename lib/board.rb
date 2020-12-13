@@ -69,12 +69,11 @@ class Board
     split_letters(coordinates)
     split_numbers(coordinates)
     return false if invalid_diagonal(coordinates) == false
-    return false if  overlap(coordinates) == false
+    return false if overlap(coordinates) == false
     valid_length(ship, coordinates) &&
     valid_consecutive_numbers?(coordinates) ||
     valid_length(ship, coordinates) &&
     valid_consecutive_letters?(coordinates)
-    require "pry"; binding.pry
   end
 
   def place(ship, coordinates)
