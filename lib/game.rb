@@ -1,7 +1,7 @@
 require "./lib/cell"
 require "./lib/ship"
 require "./lib/board"
-require "./lib/messages"
+
 
 class Game
   attr_reader:cpu_board,
@@ -10,9 +10,7 @@ class Game
              :user_submarine,
              :comp_sub,
              :comp_cruiser,
-             :cpu_ships_placed,
-             :player_ships_placed,
-             :messages
+             :cpu_ships_placed
 
   def initialize
     @cpu_board = Board.new
@@ -22,8 +20,8 @@ class Game
     @comp_cruiser = Ship.new("Cruiser", 3)
     @comp_submarine = Ship.new("Submarine", 2)
     @cpu_ships_placed = false
-    @player_ships_placed = false
-    # @messages = Messages.new
+
+
   end
 
   def vertical_or_horizontal_cruiser
@@ -78,6 +76,7 @@ class Game
 
   def assign_missing_letter_coordinates(response)
     if response[0][0] == "A"
+
       coordinates = [response, "B" + response[-1], "C" + response[-1]]
     else
     coordinates = [response, "C" + response[-1], "D" + response[-1]]
@@ -160,7 +159,6 @@ class Game
   end
 
   def player_place_ships(ship, coordinates)
-    messages = Messages.new
     @player_board.create_board
     until @player_board.valid_placement?(@user_cruiser, coordinates) == true
       puts "Invalid Placement, Try Again"
@@ -179,27 +177,100 @@ class Game
       puts @player_board.render(true)
   end
 
-  def turn
-
-    if @cpu_ships_placed == false
-      @cpu_board.create_board
-      vertical_or_horizontal_cruiser
-      vertical_or_horizontal_sub
-      puts "=============COMPUTER BOARD============="
-      puts @cpu_board.render(true)
-    else
-      puts "=============COMPUTER BOARD============="
-      puts @cpu_board.render(true)
-      puts "==============PLAYER BOARD=============="
-      puts @player_board.render(true)
+  def main_menu
+    puts "Welcome to BATTLESHIP Enter p to play. Enter q to quit."
+    player_input = gets.chomp.downcase
+    if  player_input == "p" || "P"
+       start_game
+     elsif player_input == "q" || "Q"
+       exit
+     else
+       puts "Invalid response. Use p or q"
+       main_menu
     end
 
-    # if @player_ships_placed == false
-    #   @messages.player_ship_placement_cruiser
-    # end
+  end
+
+  def player_ship_placement_cruiser
+    puts "I have laid out my ships on the grid.\nYou now need to lay out your two ships.\nThe Cruiser is three units long and the Submarine is two units long.
+  1 2 3 4
+A . . . .
+B . . . .
+C . . . .
+D . . . .
+Enter the squares for the Cruiser (3 spaces):
+>"
+  coordinates = gets.chomp.upcase.split(" ")
+
+  player_place_ships(@user_cruiser, coordinates)
 
 
+  end
 
+  def turn
+    require "pry"; binding.pry
+    while (@user_cruiser.sunk? == false && @user_submarine.sunk? == false) ||
+      (@comp_cruiser.sunk? == false && @comp_submarine.sunk? == false)
+  if @cpu_ships_placed == false
+    @cpu_board.create_board
+    vertical_or_horizontal_cruiser
+    vertical_or_horizontal_sub
+
+    puts "=============COMPUTER BOARD============="
+    puts @cpu_board.render(true)
+    puts "==============PLAYER BOARD=============="
+    player_ship_placement_cruiser
+  else
+    puts "=============COMPUTER BOARD============="
+    puts @cpu_board.render(true)
+    puts "==============PLAYER BOARD=============="
+    puts @player_board.render(true)
+    player_shoot
+      end
+    end
+  end
+
+
+  def player_shoot
+    puts ' Choose the coordinate for your shot'
+    user_coordinate = gets.chomp.upcase
+    require "pry"; binding.pry
+    if @cpu_board.valid_coordinate?(user_coordinate)
+      @cpu_board.cells[user_coordinate].fire_upon
+      player_results(user_coordinate)
+    else
+      puts "That is an invalid_coordinate. Please try again:"
+      player_shoot
+    end
+  end
+
+  def computer_shot
+    shoot = @player_board.cells.keys.sample
+    until @player_board.cells[shoot].fired_upon? != true
+      shoot
+
+    end
+    @player_board.cells[shoot].fire_upon
+    computer_results(shoot)
+  end
+
+  def computer_results(shoot)
+    if @player_board.cells[shoot].empty?
+
+      puts "My shot on #{shoot} was a miss."
+    else
+      puts "My shot on #{shoot} was a hit."
+    end
+  end
+
+  def player_results(user_coordinate)
+      if @cpu_board.cells[user_coordinate].empty?
+        puts "Your shot on #{user_coordinate} was a miss."
+        computer_shot
+      else
+        puts "Your shot on #{user_coordinate} was a hit."
+        computer_shot
+    end
   end
 end
 

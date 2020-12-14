@@ -98,7 +98,7 @@ class Board
   end
 
   def render(default = false)
-    " 1 2 3 4 \n" +
+    "   1 2 3 4 \n" +
     " A #{@cells["A1"].render(default)} #{@cells["A2"].render(default)} #{@cells["A3"].render(default)} #{@cells["A4"].render(default)} \n" +
     " B #{@cells["B1"].render(default)} #{@cells["B2"].render(default)} #{@cells["B3"].render(default)} #{@cells["B4"].render(default)} \n" +
     " C #{@cells["C1"].render(default)} #{@cells["C2"].render(default)} #{@cells["C3"].render(default)} #{@cells["C4"].render(default)} \n" +
