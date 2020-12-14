@@ -8,7 +8,6 @@ class Messages
              :cruiser,
              :submarine
   def initialize
-    @game = Game.new
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
   end
@@ -18,7 +17,7 @@ class Messages
     player_input = gets.chomp.downcase
     if  player_input == "p" || "P"
        start_game
-     elsif player_input == "q" || "Q"
+     elsif player_input == "q" || "q"
        exit
      else
        puts "Invalid response. Use p or q"
