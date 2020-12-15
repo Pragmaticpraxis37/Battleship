@@ -203,9 +203,9 @@ Enter the squares for the Cruiser (3 spaces):
   end
 
   def turn
-    while (@user_cruiser.sunk? == false && @user_submarine.sunk? == false) ||
+    unless (@user_cruiser.sunk? == false && @user_submarine.sunk? == false) ||
       (@comp_cruiser.sunk? == false && @comp_submarine.sunk? == false)
-    if @cpu_ships_placed == false
+      if @cpu_ships_placed == false
     @cpu_board.create_board
     vertical_or_horizontal_cruiser
     vertical_or_horizontal_sub
@@ -220,14 +220,23 @@ Enter the squares for the Cruiser (3 spaces):
     puts "==============PLAYER BOARD=============="
     puts @player_board.render(true)
     player_shoot
+
       end
+    end
+  end
+
+  def win_message
+    if @user_cruiser.sunk? == true && @user_submarine.sunk? == true
+      puts "I won"
+    else
+      puts "You won!"
     end
   end
 
   def player_shoot
     puts ' Choose the coordinate for your shot'
     user_coordinate = gets.chomp.upcase
-    if @cpu_board.valid_coordinate?(user_coordinate)
+    if @cpu_board.valid_coordinate?(user_coordinate) && @cpu_board.cells[user_coordinate].fired_upon? != true
       @cpu_board.cells[user_coordinate].fire_upon
       player_results(user_coordinate)
     else
@@ -242,13 +251,12 @@ Enter the squares for the Cruiser (3 spaces):
       shoot
     end
     @player_board.cells[shoot].fire_upon
-    require "pry"; binding.pry
+
     computer_results(shoot)
   end
 
   def computer_results(shoot)
     if @player_board.cells[shoot].empty?
-      require "pry"; binding.pry
       puts "My shot on #{shoot} was a miss."
     elsif @player_board.cells[shoot].ship.sunk? == false
       puts "My shot on #{shoot} was a hit."
