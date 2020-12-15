@@ -68,12 +68,13 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    split_letters(coordinates)
 
+    split_letters(coordinates)
     split_numbers(coordinates)
 
     return false if invalid_diagonal(coordinates) == false
     return false if  overlap(coordinates) == false
+
 
     valid_length(ship, coordinates) &&
     valid_consecutive_numbers?(coordinates) ||
@@ -83,6 +84,7 @@ class Board
   end
 
   def place(ship, coordinates)
+    require "pry"; binding.pry
     if valid_placement?(ship, coordinates)
       coordinates.each do |coord|
         @cells[coord].place_ship(ship)
@@ -93,6 +95,7 @@ class Board
 
   def overlap(coordinates)
     coordinates.all? do |coord|
+      return false if @cells[coord] == nil 
       @cells[coord].empty?
     end
   end

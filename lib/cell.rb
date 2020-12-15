@@ -17,6 +17,7 @@ class Cell
 
   def fired_upon?
     @fired_upon
+    p "1"
   end
 
   def fire_upon

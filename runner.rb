@@ -6,7 +6,4 @@ require './lib/game'
 
 
 game = Game.new
-
-
-
-require "pry"; binding.pry
+game.setup

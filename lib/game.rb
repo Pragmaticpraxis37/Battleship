@@ -1,8 +1,6 @@
 require "./lib/cell"
 require "./lib/ship"
 require "./lib/board"
-
-
 class Game
   attr_reader:cpu_board,
              :player_board,
@@ -20,14 +18,11 @@ class Game
     @comp_cruiser = Ship.new("Cruiser", 3)
     @comp_submarine = Ship.new("Submarine", 2)
     @cpu_ships_placed = false
-
   end
 
   def vertical_or_horizontal_cruiser
     array = ["v", "h"].sample
-
     if array == "v"
-
     vertical_cruiser_letter_coordinate
     else
     horizontal_cruiser_number_coordinate
@@ -75,7 +70,6 @@ class Game
 
   def assign_missing_letter_coordinates(response)
     if response[0][0] == "A"
-
       coordinates = [response, "B" + response[-1], "C" + response[-1]]
     else
     coordinates = [response, "C" + response[-1], "D" + response[-1]]
@@ -85,9 +79,7 @@ class Game
 
   def vertical_or_horizontal_sub
       array = ["v", "h"].sample
-
       if array == "v"
-
       vertical_sub_letter_coordinate
       else
       horizontal_sub_number_coordinate
@@ -98,7 +90,6 @@ class Game
     array = ["A", "B", "C"].sample
     vertical_sub_number_coordinate(array)
   end
-
   def horizontal_sub_number_coordinate
     array = [1, 2, 3].sample
     horizontal_sub_letter_coordinate(array)
@@ -179,9 +170,9 @@ class Game
   def main_menu
     puts "Welcome to BATTLESHIP Enter p to play. Enter q to quit."
     player_input = gets.chomp.downcase
-    if  player_input == "p" || "P"
-       start_game
-     elsif player_input == "q" || "Q"
+    if player_input == "p"
+       turn
+     elsif player_input == "q"
        exit
      else
        puts "Invalid response. Use p or q"
@@ -190,26 +181,25 @@ class Game
   end
 
   def player_ship_placement_cruiser
-    puts "I have laid out my ships on the grid.\nYou now need to lay out your two ships.\nThe Cruiser is three units long and the Submarine is two units long.
-  1 2 3 4
-A . . . .
-B . . . .
-C . . . .
-D . . . .
-Enter the squares for the Cruiser (3 spaces):
->"
-  coordinates = gets.chomp.upcase.split(" ")
-  player_place_ships(@user_cruiser, coordinates)
+    puts "I have laid out my ships on the grid."
+    puts "You now need to lay out your two ships."
+    puts "The Cruiser is three units long and the Submarine is two units long."
+    puts "1 2 3 4"
+  puts "A . . . ."
+  puts "B . . . ."
+  puts "C . . . ."
+  puts "D . . . ."
+  puts "Enter the squares for the Cruiser (3 spaces):"
+  puts ">"
+        coordinates = gets.chomp.upcase.split(" ")
+        player_place_ships(@user_cruiser, coordinates)
   end
 
   def turn
-    while (@user_cruiser.sunk? == false && @user_submarine.sunk? == false) ||
-      (@comp_cruiser.sunk? == false && @comp_submarine.sunk? == false)
     if @cpu_ships_placed == false
     @cpu_board.create_board
     vertical_or_horizontal_cruiser
     vertical_or_horizontal_sub
-
     puts "=============COMPUTER BOARD============="
     puts @cpu_board.render(true)
     puts "==============PLAYER BOARD=============="
@@ -220,14 +210,13 @@ Enter the squares for the Cruiser (3 spaces):
     puts "==============PLAYER BOARD=============="
     puts @player_board.render(true)
     player_shoot
-      end
     end
   end
 
   def player_shoot
     puts ' Choose the coordinate for your shot'
     user_coordinate = gets.chomp.upcase
-    if @cpu_board.valid_coordinate?(user_coordinate)
+    if @cpu_board.valid_coordinate?(user_coordinate) && @cpu_board.cells[user_coordinate].fired_upon? != true
       @cpu_board.cells[user_coordinate].fire_upon
       player_results(user_coordinate)
     else
@@ -237,18 +226,20 @@ Enter the squares for the Cruiser (3 spaces):
   end
 
   def computer_shot
+    if @comp_cruiser.sunk? && @comp_submarine.sunk?
+      end_game
+    else
     shoot = @player_board.cells.keys.sample
-    until @player_board.cells[shoot].fired_upon? != true
+      until @player_board.cells[shoot].fired_upon? != true
       shoot
-    end
+      end
     @player_board.cells[shoot].fire_upon
-    require "pry"; binding.pry
     computer_results(shoot)
+    end
   end
 
   def computer_results(shoot)
     if @player_board.cells[shoot].empty?
-      require "pry"; binding.pry
       puts "My shot on #{shoot} was a miss."
     elsif @player_board.cells[shoot].ship.sunk? == false
       puts "My shot on #{shoot} was a hit."
@@ -269,7 +260,37 @@ Enter the squares for the Cruiser (3 spaces):
       computer_shot
     end
   end
-end
 
-game = Game.new
-require "pry"; binding.pry
+  def end_game
+      @user_cruiser.sunk? == true && @user_submarine.sunk? == true ||
+      @comp_cruiser.sunk? == true && @comp_submarine.sunk? == true
+  end
+
+  def game_over_message
+    if @user_cruiser.sunk? == true && @user_submarine.sunk? == true
+      puts "I win"
+    elsif @comp_cruiser.sunk? == true && @comp_submarine.sunk? == true
+      puts "You win"
+    end
+  end
+
+  def setup
+    main_menu
+      until end_game
+        turn
+      end
+      game_over_message
+      board_reset
+      setup
+  end
+
+  def board_reset
+    @cpu_board = Board.new
+    @player_board = Board.new
+    @comp_cruiser = Ship.new("Cruiser", 3)
+    @comp_submarine = Ship.new("Submarine", 2)
+    @user_cruiser = Ship.new("Cruiser", 3)
+    @user_submarine = Ship.new("Submarine", 2)
+    @cpu_ships_placed = false
+  end
+end
