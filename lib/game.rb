@@ -21,7 +21,6 @@ class Game
     @comp_submarine = Ship.new("Submarine", 2)
     @cpu_ships_placed = false
 
-
   end
 
   def vertical_or_horizontal_cruiser
@@ -133,8 +132,8 @@ class Game
     else
       coordinates = [response, response[0] + "4"]
     end
-      comp_place_ships(@comp_submarine, coordinates)
-    end
+    comp_place_ships(@comp_submarine, coordinates)
+  end
 
   def assign_missing_sub_letter_coordinates(response)
     if response[0][0] == "A"
@@ -188,7 +187,6 @@ class Game
        puts "Invalid response. Use p or q"
        main_menu
     end
-
   end
 
   def player_ship_placement_cruiser
@@ -201,17 +199,13 @@ D . . . .
 Enter the squares for the Cruiser (3 spaces):
 >"
   coordinates = gets.chomp.upcase.split(" ")
-
   player_place_ships(@user_cruiser, coordinates)
-
-
   end
 
   def turn
-    require "pry"; binding.pry
     while (@user_cruiser.sunk? == false && @user_submarine.sunk? == false) ||
       (@comp_cruiser.sunk? == false && @comp_submarine.sunk? == false)
-  if @cpu_ships_placed == false
+    if @cpu_ships_placed == false
     @cpu_board.create_board
     vertical_or_horizontal_cruiser
     vertical_or_horizontal_sub
@@ -230,11 +224,9 @@ Enter the squares for the Cruiser (3 spaces):
     end
   end
 
-
   def player_shoot
     puts ' Choose the coordinate for your shot'
     user_coordinate = gets.chomp.upcase
-    require "pry"; binding.pry
     if @cpu_board.valid_coordinate?(user_coordinate)
       @cpu_board.cells[user_coordinate].fire_upon
       player_results(user_coordinate)
@@ -248,28 +240,33 @@ Enter the squares for the Cruiser (3 spaces):
     shoot = @player_board.cells.keys.sample
     until @player_board.cells[shoot].fired_upon? != true
       shoot
-
     end
     @player_board.cells[shoot].fire_upon
+    require "pry"; binding.pry
     computer_results(shoot)
   end
 
   def computer_results(shoot)
     if @player_board.cells[shoot].empty?
-
+      require "pry"; binding.pry
       puts "My shot on #{shoot} was a miss."
-    else
+    elsif @player_board.cells[shoot].ship.sunk? == false
       puts "My shot on #{shoot} was a hit."
+    else
+      puts "My shot on #{shoot} sunk your #{@player_board.cells[shoot].ship.sunk}."
     end
   end
 
   def player_results(user_coordinate)
-      if @cpu_board.cells[user_coordinate].empty?
-        puts "Your shot on #{user_coordinate} was a miss."
-        computer_shot
-      else
-        puts "Your shot on #{user_coordinate} was a hit."
-        computer_shot
+    if @cpu_board.cells[user_coordinate].empty?
+      puts "Your shot on #{user_coordinate} was a miss."
+      computer_shot
+    elsif @cpu_board.cells[user_coordinate].ship.sunk? == false
+      puts "Your shot on #{user_coordinate} was a hit."
+      computer_shot
+    else
+      puts "Your shot on #{user_coordinate} sunk my #{@cpu_board.cells[user_coordinate].ship.sunk}."
+      computer_shot
     end
   end
 end
