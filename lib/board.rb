@@ -104,7 +104,5 @@ class Board
     " B #{@cells["B1"].render(default)} #{@cells["B2"].render(default)} #{@cells["B3"].render(default)} #{@cells["B4"].render(default)} \n" +
     " C #{@cells["C1"].render(default)} #{@cells["C2"].render(default)} #{@cells["C3"].render(default)} #{@cells["C4"].render(default)} \n" +
     " D #{@cells["D1"].render(default)} #{@cells["D2"].render(default)} #{@cells["D3"].render(default)} #{@cells["D4"].render(default)}"
-
   end
-
 end

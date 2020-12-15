@@ -13,7 +13,13 @@ class Ship
     @health.zero?
   end
 
+  def sunk
+    if sunk?
+      return @name
+    end 
+  end
+
   def hit
-    @health -= 1 
+    @health -= 1
   end
 end
