@@ -234,7 +234,6 @@ Enter the squares for the Cruiser (3 spaces):
   def player_shoot
     puts ' Choose the coordinate for your shot'
     user_coordinate = gets.chomp.upcase
-    require "pry"; binding.pry
     if @cpu_board.valid_coordinate?(user_coordinate)
       @cpu_board.cells[user_coordinate].fire_upon
       player_results(user_coordinate)

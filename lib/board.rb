@@ -74,6 +74,7 @@ class Board
 
     return false if invalid_diagonal(coordinates) == false
     return false if  overlap(coordinates) == false
+    
 
     valid_length(ship, coordinates) &&
     valid_consecutive_numbers?(coordinates) ||
