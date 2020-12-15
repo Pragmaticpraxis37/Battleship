@@ -6,8 +6,8 @@ class Game
              :player_board,
              :user_cruiser,
              :user_submarine,
-             :comp_sub,
-             :comp_cruiser,
+             :cpu_submarine,
+             :cpu_cruiser,
              :cpu_ships_placed
 
   def initialize
@@ -15,107 +15,108 @@ class Game
     @player_board = Board.new
     @user_cruiser = Ship.new("Cruiser", 3)
     @user_submarine = Ship.new("Submarine", 2)
-    @comp_cruiser = Ship.new("Cruiser", 3)
-    @comp_submarine = Ship.new("Submarine", 2)
+    @cpu_cruiser = Ship.new("Cruiser", 3)
+    @cpu_submarine = Ship.new("Submarine", 2)
     @cpu_ships_placed = false
   end
 
   def vertical_or_horizontal_cruiser
-    array = ["v", "h"].sample
-    if array == "v"
-    vertical_cruiser_letter_coordinate
+    orientation = ["v", "h"].sample
+    if orientation == "v"
+      vertical_cruiser_letter_coordinate
     else
-    horizontal_cruiser_number_coordinate
+      horizontal_cruiser_number_coordinate
     end
   end
 
   def vertical_cruiser_letter_coordinate
-    array = ["A", "B"].sample
-    vertical_cruiser_number_coordinate(array)
+    column = ["A", "B"].sample
+    vertical_cruiser_number_coordinate(column)
   end
 
   def horizontal_cruiser_number_coordinate
-    array = [1, 2].sample
-    horizontal_cruiser_letter_coordinate(array)
+    row = [1, 2].sample
+    horizontal_cruiser_letter_coordinate(row)
   end
 
-  def vertical_cruiser_number_coordinate(array)
-    array2 = [1,2,3,4].sample
-    join_letters(array, array2)
+  def vertical_cruiser_number_coordinate(column)
+    select_row = [1,2,3,4].sample
+    join_letters(column, select_row)
   end
 
-  def horizontal_cruiser_letter_coordinate(array)
-    array2= ["A", "B", "C", "D"].sample
-    join_numbers(array2, array)
+  def horizontal_cruiser_letter_coordinate(row)
+    select_column = ["A", "B", "C", "D"].sample
+    join_numbers(select_column, row)
   end
 
-  def join_letters(array, array2)
-    response = [array , array2.to_s].join
+  def join_letters(column, select_row)
+    response = [column, select_row.to_s].join
     assign_missing_letter_coordinates(response)
   end
 
-  def join_numbers(array2, array)
-    response = [array2 , array.to_s].join
+  def join_numbers(select_column, row)
+    response = [select_column, row.to_s].join
     assign_missing_number_coordinates(response)
   end
 
   def assign_missing_number_coordinates(response)
-      if response [-1] == "1"
-        coordinates = [response, response[0] + "2", response[0] + "3"]
-      else
-        coordinates = [response, response[0] + "3", response[0] + "4"]
-      end
-      comp_place_ships(@comp_cruiser, coordinates)
+    if response[-1] == "1"
+      coordinates = [response, response[0] + "2", response[0] + "3"]
+    else
+      coordinates = [response, response[0] + "3", response[0] + "4"]
+    end
+      cpu_place_ships(@cpu_cruiser, coordinates)
     end
 
   def assign_missing_letter_coordinates(response)
-    if response[0][0] == "A"
+    if response[0] == "A"
       coordinates = [response, "B" + response[-1], "C" + response[-1]]
     else
-    coordinates = [response, "C" + response[-1], "D" + response[-1]]
+      coordinates = [response, "C" + response[-1], "D" + response[-1]]
     end
-    comp_place_ships(@comp_cruiser, coordinates)
+    cpu_place_ships(@cpu_cruiser, coordinates)
   end
 
-  def vertical_or_horizontal_sub
-      array = ["v", "h"].sample
-      if array == "v"
-      vertical_sub_letter_coordinate
-      else
-      horizontal_sub_number_coordinate
-      end
+  def vertical_or_horizontal_submarine
+    orientation = ["v", "h"].sample
+    if orientation == "v"
+      vertical_submarine_letter_coordinate
+    else
+      horizontal_submarine_number_coordinate
     end
-
-  def vertical_sub_letter_coordinate
-    array = ["A", "B", "C"].sample
-    vertical_sub_number_coordinate(array)
-  end
-  def horizontal_sub_number_coordinate
-    array = [1, 2, 3].sample
-    horizontal_sub_letter_coordinate(array)
   end
 
-  def vertical_sub_number_coordinate(array)
-    array2 = [1,2,3,4].sample
-    join_sub_letters(array, array2)
+  def vertical_submarine_letter_coordinate
+    column = ["A", "B", "C"].sample
+    vertical_submarine_number_coordinate(column)
   end
 
-  def horizontal_sub_letter_coordinate(array)
-    array2= ["A", "B", "C", "D"].sample
-    join_sub_numbers(array2, array)
+  def horizontal_submarine_number_coordinate
+    row = [1, 2, 3].sample
+    horizontal_submarine_letter_coordinate(row)
   end
 
-  def join_sub_letters(array, array2)
-    response = [array , array2.to_s].join
-    assign_missing_sub_letter_coordinates(response)
+  def vertical_submarine_number_coordinate(column)
+    select_row = [1, 2, 3, 4].sample
+    join_submarine_letters(column, select_row)
   end
 
-  def join_sub_numbers(array2, array)
-    response = [array2 , array.to_s].join
-    assign_missing_sub_number_coordinates(response)
+  def horizontal_submarine_letter_coordinate(row)
+    select_column = ["A", "B", "C", "D"].sample
+    join_submarine_numbers(select_column, row)
   end
 
-  def assign_missing_sub_number_coordinates(response)
+  def join_submarine_letters(select_column, row)
+    response = [select_column, row.to_s].join
+    assign_missing_submarine_letter_coordinates(response)
+  end
+
+  def join_submarine_numbers(column, select_row)
+    response = [column, select_row.to_s].join
+    assign_missing_submarine_number_coordinates(response)
+  end
+
+  def assign_missing_submarine_number_coordinates(response)
     if response[-1] == "1"
       coordinates = [response, response[0] + "2"]
     elsif response[-1] == "2"
@@ -123,61 +124,80 @@ class Game
     else
       coordinates = [response, response[0] + "4"]
     end
-    comp_place_ships(@comp_submarine, coordinates)
+    cpu_place_ships(@cpu_submarine, coordinates)
   end
 
-  def assign_missing_sub_letter_coordinates(response)
-    if response[0][0] == "A"
+  def assign_missing_submarine_letter_coordinates(response)
+    if response[0] == "A"
       coordinates = [response, "B" + response[-1]]
-    elsif response[0][0] == "B"
+    elsif response[0] == "B"
       coordinates = [response, "C" + response[-1]]
     else
       coordinates = [response, "D" + response[-1]]
     end
-      comp_place_ships(@comp_submarine, coordinates)
+    cpu_place_ships(@cpu_submarine, coordinates)
   end
 
-  def comp_place_ships(ship, coordinates)
+  def cpu_valid_placement?
     if @cpu_board.valid_placement?(ship, coordinates)
-      coordinates.each do |coord|
-        @cpu_board.cells[coord].place_ship(ship)
-      end
+      cpu_place_ships(ship, coordinates)
     else
-      vertical_or_horizontal_sub
+      vertical_or_horizontal_submarine
+    end
+  end
+
+  def cpu_place_ships(ship, coordinates)
+    coordinates.each do |coord|
+      @cpu_board.cells[coord].place_ship(ship)
     end
     @cpu_ships_placed = true
   end
 
-  def player_place_ships(ship, coordinates)
-    @player_board.create_board
-    until @player_board.valid_placement?(@user_cruiser, coordinates) == true
-      puts "Invalid Placement, Try Again"
+  def player_ship_placement_validation(ship, coordinates)
+    until @player_board.valid_placement?(ship, coordinates) == true
+      invalid_placement_message
       coordinates = gets.chomp.upcase.split(" ")
     end
-      @player_board.place(@user_cruiser, coordinates)
-      puts @player_board.render(true)
-      puts "Enter the squares for the Submarine (2 spaces):
-    >"
-      coordinates = gets.chomp.upcase.split(" ")
-        until @player_board.valid_placement?(@user_submarine, coordinates) == true
-      puts "Invalid Placement, Try Again"
-      coordinates = gets.chomp.upcase.split(" ")
-    end
-      @player_board.place(@user_submarine, coordinates)
-      puts @player_board.render(true)
+    player_ship_placement(ship, coordinates)
+  end
+
+  def player_validate_placement(ship, coordinates)
+    player_ship_placement_validation(@user_cruiser,coordinates)
+    puts @player_board.render(true)
+    sumbarine_place_message
+    coordinates = gets.chomp.upcase.split(" ")
+    player_ship_placement_validation(@user_submarine, coordinates)
+    puts @player_board.render(true)
   end
 
   def main_menu
     puts "Welcome to BATTLESHIP Enter p to play. Enter q to quit."
     player_input = gets.chomp.downcase
     if player_input == "p"
-       turn
-     elsif player_input == "q"
-       exit
-     else
-       puts "Invalid response. Use p or q"
-       main_menu
+      player_create_board
+    elsif player_input == "q"
+      exit
+    else
+      puts "Invalid response. Use p or q"
+      main_menu
     end
+  end
+
+  def player_create_board
+    @player_board.create_board
+    turn
+  end
+
+  def sumbarine_place_message
+    puts "Enter the squares for the Submarine (2 spaces):\n>"
+  end
+
+  def invalid_placement_message
+    puts "Invalid Placement, Try Again"
+  end
+
+  def player_ship_placement(ship, coordinates)
+    @player_board.place(ship, coordinates)
   end
 
   def player_ship_placement_cruiser
@@ -192,14 +212,14 @@ class Game
   puts "Enter the squares for the Cruiser (3 spaces):"
   puts ">"
         coordinates = gets.chomp.upcase.split(" ")
-        player_place_ships(@user_cruiser, coordinates)
+    player_validate_placement(@user_cruiser, coordinates)
   end
 
   def turn
     if @cpu_ships_placed == false
     @cpu_board.create_board
     vertical_or_horizontal_cruiser
-    vertical_or_horizontal_sub
+    vertical_or_horizontal_submarine
     puts "=============COMPUTER BOARD============="
     puts @cpu_board.render(true)
     puts "==============PLAYER BOARD=============="
@@ -226,7 +246,7 @@ class Game
   end
 
   def computer_shot
-    if @comp_cruiser.sunk? && @comp_submarine.sunk?
+    if @cpu_cruiser.sunk? && @cpu_submarine.sunk?
       end_game
     else
     shoot = @player_board.cells.keys.sample
@@ -263,13 +283,13 @@ class Game
 
   def end_game
       @user_cruiser.sunk? == true && @user_submarine.sunk? == true ||
-      @comp_cruiser.sunk? == true && @comp_submarine.sunk? == true
+      @cpu_cruiser.sunk? == true && @cpu_submarine.sunk? == true
   end
 
   def game_over_message
     if @user_cruiser.sunk? == true && @user_submarine.sunk? == true
       puts "I win"
-    elsif @comp_cruiser.sunk? == true && @comp_submarine.sunk? == true
+    elsif @cpu_cruiser.sunk? == true && @cpu_submarine.sunk? == true
       puts "You win"
     end
   end
@@ -287,8 +307,8 @@ class Game
   def board_reset
     @cpu_board = Board.new
     @player_board = Board.new
-    @comp_cruiser = Ship.new("Cruiser", 3)
-    @comp_submarine = Ship.new("Submarine", 2)
+    @cpu_cruiser = Ship.new("Cruiser", 3)
+    @cpu_submarine = Ship.new("Submarine", 2)
     @user_cruiser = Ship.new("Cruiser", 3)
     @user_submarine = Ship.new("Submarine", 2)
     @cpu_ships_placed = false
