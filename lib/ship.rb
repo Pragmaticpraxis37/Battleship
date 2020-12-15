@@ -14,9 +14,7 @@ class Ship
   end
 
   def sunk
-    if sunk?
-      return @name
-    end 
+    return @name if sunk?
   end
 
   def hit
