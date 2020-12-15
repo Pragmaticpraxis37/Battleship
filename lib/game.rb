@@ -108,6 +108,7 @@ class Game
     end
     comp_place_ships(@comp_submarine, coordinates)
   end
+
   def assign_missing_sub_letter_coordinates(response)
     if response[0][0] == "A"
       coordinates = [response, "B" + response[-1]]
@@ -118,6 +119,7 @@ class Game
     end
       comp_place_ships(@comp_submarine, coordinates)
   end
+
   def comp_place_ships(ship, coordinates)
     if @cpu_board.valid_placement?(ship, coordinates)
       coordinates.each do |coord|
@@ -128,6 +130,7 @@ class Game
     end
     @cpu_ships_placed = true
   end
+
   def player_place_ships(ship, coordinates)
     @player_board.create_board
     until @player_board.valid_placement?(@user_cruiser, coordinates) == true
@@ -146,12 +149,13 @@ class Game
       @player_board.place(@user_submarine, coordinates)
       puts @player_board.render(true)
   end
+
   def main_menu
     puts "Welcome to BATTLESHIP Enter p to play. Enter q to quit."
     player_input = gets.chomp.downcase
-    if  player_input == "p" || "P"
-       start_game
-     elsif player_input == "q" || "Q"
+    if player_input == "p"
+       turn
+     elsif player_input == "q"
        exit
      else
        puts "Invalid response. Use p or q"
@@ -159,21 +163,21 @@ class Game
     end
   end
   def player_ship_placement_cruiser
-    puts "I have laid out my ships on the grid.\nYou now need to lay out your two ships.\nThe Cruiser is three units long and the Submarine is two units long.
-  1 2 3 4
-A . . . .
-B . . . .
-C . . . .
-D . . . .
-Enter the squares for the Cruiser (3 spaces):
->"
-  coordinates = gets.chomp.upcase.split(" ")
-  player_place_ships(@user_cruiser, coordinates)
+    puts "I have laid out my ships on the grid."
+    puts "You now need to lay out your two ships."
+    puts "The Cruiser is three units long and the Submarine is two units long."
+    puts "1 2 3 4"
+  puts "A . . . ."
+  puts "B . . . ."
+  puts "C . . . ."
+  puts "D . . . ."
+  puts "Enter the squares for the Cruiser (3 spaces):"
+  puts ">"
+        coordinates = gets.chomp.upcase.split(" ")
+        player_place_ships(@user_cruiser, coordinates)
   end
 
   def turn
-    while (@user_cruiser.sunk? == false && @user_submarine.sunk? == false) ||
-      (@comp_cruiser.sunk? == false && @comp_submarine.sunk? == false)
     if @cpu_ships_placed == false
     @cpu_board.create_board
     vertical_or_horizontal_cruiser
@@ -188,7 +192,6 @@ Enter the squares for the Cruiser (3 spaces):
     puts "==============PLAYER BOARD=============="
     puts @player_board.render(true)
     player_shoot
-      end
     end
   end
 
@@ -205,25 +208,26 @@ Enter the squares for the Cruiser (3 spaces):
   end
 
   def computer_shot
+    if @comp_cruiser.sunk? && @comp_submarine.sunk?
+      end_game
+    else
     shoot = @player_board.cells.keys.sample
-    until @player_board.cells[shoot].fired_upon? != true
+      until @player_board.cells[shoot].fired_upon? != true
       shoot
-    end
+      end
     @player_board.cells[shoot].fire_upon
     computer_results(shoot)
+    end
+
   end
 
   def computer_results(shoot)
     if @player_board.cells[shoot].empty?
-    
       puts "My shot on #{shoot} was a miss."
-      game_start
     elsif @player_board.cells[shoot].ship.sunk? == false
       puts "My shot on #{shoot} was a hit."
-      game_start
     else
       puts "My shot on #{shoot} sunk your #{@player_board.cells[shoot].ship.sunk}."
-      game_start
     end
   end
 
@@ -241,27 +245,38 @@ Enter the squares for the Cruiser (3 spaces):
   end
 
   def end_game
-    if (@user_cruiser.sunk? == true && @user_submarine.sunk? == true) ||
-      (@comp_cruiser.sunk? == true && @comp_submarine.sunk? == true)
-      game_over_message
-    else
-
-      turn
-    end
+      @user_cruiser.sunk? == true && @user_submarine.sunk? == true ||
+      @comp_cruiser.sunk? == true && @comp_submarine.sunk? == true
   end
 
   def game_over_message
     if @user_cruiser.sunk? == true && @user_submarine.sunk? == true
       puts "I win"
-    else
+    elsif @comp_cruiser.sunk? == true && @comp_submarine.sunk? == true
       puts "You win"
     end
   end
 
+  def setup
+    main_menu
+      until end_game
+        turn
+      end
+      game_over_message
+      board_reset
+      setup
+  end
 
-  def game_start
-    end_game
+  def board_reset
+    @cpu_board = Board.new
+    @player_board = Board.new
+    @comp_cruiser = Ship.new("Cruiser", 3)
+    @comp_submarine = Ship.new("Submarine", 2)
+    @user_cruiser = Ship.new("Cruiser", 3)
+    @user_submarine = Ship.new("Submarine", 2)
+    @cpu_ships_placed = false
   end
 end
+
 game = Game.new
 require "pry"; binding.pry
