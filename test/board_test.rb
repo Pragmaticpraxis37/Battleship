@@ -77,8 +77,10 @@ class BoardTest < Minitest::Test
     test_diagonal_2.valid_consecutive_numbers?(["C2", "D3"])
     test_diagonal_2.valid_consecutive_letters?(["C2", "D3"])
     test_diagonal_3 = Board.new
-    assert_equal false, test_diagonal_1.invalid_diagonal(["A1", "B2", "C3"])
-    assert_equal false, test_diagonal_2.invalid_diagonal(["C2", "D3"])
+    assert_equal false, test_diagonal_1.valid_diagonal(["A1", "B2", "C3"])
+    assert_equal false, test_diagonal_2.valid_diagonal(["C2", "D3"])
+    assert_equal false, test_diagonal_1.valid_diagonal(["A1", "A2", "B3"])
+    assert_equal false, test_diagonal_1.valid_diagonal(["A1", "B2", "B3"])
   end
 
   def test_valid_placement
