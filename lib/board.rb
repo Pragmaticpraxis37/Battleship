@@ -61,16 +61,18 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    split_letters(coordinates)
-    split_numbers(coordinates)
+    return false if coordinates.any? do |coord|
+      @cells[coord] == nil
+    end
 
     return false if invalid_diagonal(coordinates) == false
     return false if overlap(coordinates) == false
 
-      valid_length(ship, coordinates) &&
-      valid_consecutive_numbers?(coordinates) ||
-      valid_length(ship, coordinates) &&
-      valid_consecutive_letters?(coordinates)
+    valid_length(ship, coordinates) &&
+    valid_consecutive_numbers?(coordinates) ||
+    valid_length(ship, coordinates) &&
+    valid_consecutive_letters?(coordinates)
+
   end
 
   def place(ship, coordinates)
@@ -83,16 +85,15 @@ class Board
 
   def overlap(coordinates)
     coordinates.all? do |coord|
-      return false if @cells[coord].nil?
       @cells[coord].empty?
     end
   end
 
   def render(default = false)
-    "  1 2 3 4 \n" +
-    " A #{@cells['A1'].render(default)} #{@cells['A2'].render(default)} #{@cells['A3'].render(default)} #{@cells['A4'].render(default)} \n" +
-    " B #{@cells['B1'].render(default)} #{@cells['B2'].render(default)} #{@cells['B3'].render(default)} #{@cells['B4'].render(default)} \n" +
-    " C #{@cells['C1'].render(default)} #{@cells['C2'].render(default)} #{@cells['C3'].render(default)} #{@cells['C4'].render(default)} \n" +
-    " D #{@cells['D1'].render(default)} #{@cells['D2'].render(default)} #{@cells['D3'].render(default)} #{@cells['D4'].render(default)}"
+    "  1 2 3 4\n" +
+    "A #{@cells['A1'].render(default)} #{@cells['A2'].render(default)} #{@cells['A3'].render(default)} #{@cells['A4'].render(default)} \n" +
+    "B #{@cells['B1'].render(default)} #{@cells['B2'].render(default)} #{@cells['B3'].render(default)} #{@cells['B4'].render(default)} \n" +
+    "C #{@cells['C1'].render(default)} #{@cells['C2'].render(default)} #{@cells['C3'].render(default)} #{@cells['C4'].render(default)} \n" +
+    "D #{@cells['D1'].render(default)} #{@cells['D2'].render(default)} #{@cells['D3'].render(default)} #{@cells['D4'].render(default)}"
   end
 end
