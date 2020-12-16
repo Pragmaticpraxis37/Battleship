@@ -65,7 +65,7 @@ class BoardTest < Minitest::Test
     assert_equal true, test_numbers_2.valid_consecutive_numbers?(["A1", "A2"])
   end
 
-  def test_coordinates_cannot_be_diagonal
+  def test_coordinates_cannot_be_diagonalzzz
     test_diagonal_1 = Board.new
     test_diagonal_1.split_numbers(["A1", "B2", "C3"])
     test_diagonal_1.split_letters(["A1", "B2", "C3"])
@@ -76,8 +76,8 @@ class BoardTest < Minitest::Test
     test_diagonal_2.split_letters(["C2", "D3"])
     test_diagonal_2.valid_consecutive_numbers?(["C2", "D3"])
     test_diagonal_2.valid_consecutive_letters?(["C2", "D3"])
+    test_diagonal_3 = Board.new
     assert_equal false, test_diagonal_1.invalid_diagonal(["A1", "B2", "C3"])
-
     assert_equal false, test_diagonal_2.invalid_diagonal(["C2", "D3"])
   end
 
@@ -89,6 +89,7 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.valid_placement?(@submarine, ["C1", "B1"])
     assert_equal true, @board.valid_placement?(@submarine, ["A1", "A2"])
     assert_equal false, @board.valid_placement?(@cruiser, ["A1","B2", "C3"])
+    assert_equal false, @board.valid_placement?(@cruiser,["A1", "A2", "D1"])
   end
 
   def test_check_cells_in_ship_placement
@@ -108,16 +109,16 @@ class BoardTest < Minitest::Test
 
   end
 
-  def test_render_board_returns_expected_strings
+  def render_board_returns_expected_strings
     @board.create_board
-    expected = " 1 2 3 4 \n A . . . . \n B . . . . \n C . . . . \n D . . . ."
+    expected = "  1 2 3 4 \n A . . . . \n B . . . . \n C . . . . \n D . . . ."
     assert_equal expected, @board.render
   end
 
-  def test_render_can_show_when_default_arg_is_true
+  def render_can_show_when_default_arg_is_true
       @board.create_board
       @board.place(@cruiser, ["A1", "A2", "A3"])
-      expected = " 1 2 3 4 \n A S S S . \n B . . . . \n C . . . . \n D . . . ."
+      expected = "   1 2 3 4 \n A S S S . \n B . . . . \n C . . . . \n D . . . ."
       assert_equal expected, @board.render(true)
   end
 
