@@ -1,6 +1,7 @@
 class Cell
   attr_reader:coordinate,
              :ship
+
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = ship
@@ -17,7 +18,6 @@ class Cell
 
   def fired_upon?
     @fired_upon
-    p "1"
   end
 
   def fire_upon
@@ -31,6 +31,5 @@ class Cell
     return "M" if empty?
     return "X" if @ship.sunk? && !empty?
     return "H" if !empty?
-
-   end
+  end
 end

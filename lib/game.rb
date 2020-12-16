@@ -229,12 +229,11 @@ class Game
     if @comp_cruiser.sunk? && @comp_submarine.sunk?
       end_game
     else
-    shoot = @player_board.cells.keys.sample
-      until @player_board.cells[shoot].fired_upon? != true
-      shoot
-      end
-    @player_board.cells[shoot].fire_upon
-    computer_results(shoot)
+      possible_targets = %w[A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 D1 D2 D3 D4]
+      shoot = possible_targets.sample
+      @player_board.cells[shoot].fire_upon
+      possible_targets.delete(shoot)
+      computer_results(shoot)
     end
   end
 

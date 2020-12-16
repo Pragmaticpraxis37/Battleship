@@ -84,7 +84,6 @@ class Board
   end
 
   def place(ship, coordinates)
-    require "pry"; binding.pry
     if valid_placement?(ship, coordinates)
       coordinates.each do |coord|
         @cells[coord].place_ship(ship)
@@ -95,7 +94,7 @@ class Board
 
   def overlap(coordinates)
     coordinates.all? do |coord|
-      return false if @cells[coord] == nil 
+      return false if @cells[coord] == nil
       @cells[coord].empty?
     end
   end
