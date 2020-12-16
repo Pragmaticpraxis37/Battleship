@@ -68,7 +68,7 @@ class Game
     vertical_or_horizontal_cruiser
     vertical_or_horizontal_submarine
     @message.computer_boarder
-    puts @cpu_board.render(true)
+    puts @cpu_board.render
   end
 
   def player_setup_board
@@ -254,7 +254,7 @@ class Game
 
   def shoot_setup
     @message.computer_boarder
-    puts @cpu_board.render(true)
+    puts @cpu_board.render
     @message.player_boarder
     puts @player_board.render(true)
   end
