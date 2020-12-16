@@ -26,13 +26,14 @@ class Game
 
 
   def setup
+
     main_menu
-      until end_game
-        turn
-      end
-      game_over_message
-      board_reset
-      setup
+    until end_game
+      turn
+    end
+    game_over_message
+    board_reset
+    setup
   end
 
   def main_menu
@@ -49,15 +50,15 @@ class Game
   end
 
   def end_game
-      @user_cruiser.sunk? == true && @user_submarine.sunk? == true ||
-      @cpu_cruiser.sunk? == true && @cpu_submarine.sunk? == true
+    @user_cruiser.sunk? == true && @user_submarine.sunk? == true ||
+    @cpu_cruiser.sunk? == true && @cpu_submarine.sunk? == true
   end
 
   def turn
     if @cpu_ships_placed == false
       computer_setup_board
       player_setup_board
-  else
+    else
     shoot_setup
     player_shoot
     end
@@ -76,9 +77,9 @@ class Game
     player_ship_placement_cruiser
   end
 
-
   def vertical_or_horizontal_cruiser
-    orientation = ["v", "h"].sample
+
+    orientation = %w[v, h].sample
     if orientation == "v"
       vertical_cruiser_letter_coordinate
     else
@@ -87,7 +88,7 @@ class Game
   end
 
   def vertical_cruiser_letter_coordinate
-    column = ["A", "B"].sample
+    column = %w[A, B].sample
     vertical_cruiser_number_coordinate(column)
   end
 
@@ -97,7 +98,7 @@ class Game
   end
 
   def vertical_cruiser_number_coordinate(column)
-    select_row = [1,2,3,4].sample
+    select_row = [1, 2, 3, 4].sample
     join_letters(column, select_row)
   end
 
@@ -123,7 +124,7 @@ class Game
       coordinates = [response, response[0] + "3", response[0] + "4"]
     end
       cpu_valid_placement?(@cpu_cruiser, coordinates)
-    end
+  end
 
   def assign_missing_letter_coordinates(response)
     if response[0] == "A"
@@ -195,7 +196,7 @@ class Game
     cpu_valid_placement?(@cpu_submarine, coordinates)
   end
 
-  def cpu_valid_placement?(ship,coordinates)
+  def cpu_valid_placement?(ship, coordinates)
     if @cpu_board.valid_placement?(ship, coordinates)
       coordinates.each do |coord|
         @cpu_board.cells[coord].place_ship(ship)
@@ -216,25 +217,12 @@ class Game
   end
 
   def player_validate_placement(ship, coordinates)
-    player_ship_placement_validation(@user_cruiser,coordinates)
+    player_ship_placement_validation(@user_cruiser, coordinates)
     puts @player_board.render(true)
     @message.submarine_place_message
     coordinates = gets.chomp.upcase.split(" ")
     player_ship_placement_validation(@user_submarine, coordinates)
     puts @player_board.render(true)
-  end
-
-  def main_menu
-    @message.welcome_message
-    player_input = gets.chomp.downcase
-    if player_input == "p"
-      player_create_board
-    elsif player_input == "q"
-      exit
-    else
-      @message.main_menu_invalid
-      main_menu
-    end
   end
 
   def player_create_board
@@ -248,7 +236,7 @@ class Game
 
   def player_ship_placement_cruiser
     @message.player_ship_cruiser_message
-        coordinates = gets.chomp.upcase.split(" ")
+      coordinates = gets.chomp.upcase.split(" ")
     player_validate_placement(@user_cruiser, coordinates)
   end
 
@@ -295,22 +283,21 @@ class Game
   def player_results(user_coordinate)
     if @cpu_board.cells[user_coordinate].empty?
       @message.player_shot_miss(user_coordinate)
-      computer_shot
     elsif @cpu_board.cells[user_coordinate].ship.sunk? == false
       @message.player_shot_hit(user_coordinate)
-      computer_shot
     else
       puts "Your shot #{user_coordinate} sent my #{@cpu_board.cells[user_coordinate].ship.sunk} to Davey Jones Locker."
-      computer_shot
     end
+    computer_shot
   end
 
 
   def game_over_message
+
     if @user_cruiser.sunk? == true && @user_submarine.sunk? == true
       @message.cpu_win_message
     elsif @cpu_cruiser.sunk? == true && @cpu_submarine.sunk? == true
-       @message.player_win_message
+      @message.player_win_message
     end
   end
 
