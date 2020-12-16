@@ -38,8 +38,8 @@ class Board
   def valid_diagonal(coordinates)
     coordinates.each_cons(3) do |coord|
       return false if coord[0][0] == coord[1][0] && coord[2][0] != coord[0][0] ||
-      coord[1][0] == coord[2][0] && coord[2][0] != coord[0][0]
-
+      coord[1][0] == coord[2][0] && coord[2][0] != coord[0][0] ||
+      coord[1][1] == coord[2][1] && coord[0][1] != coord[2][1]
       end
       if valid_consecutive_letters?(coordinates) && valid_consecutive_numbers?(coordinates) == true
       false
